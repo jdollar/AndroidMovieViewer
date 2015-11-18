@@ -1,0 +1,6 @@
+#directories
+/build
+
+#file extensions
+*.jar
+*.bat
