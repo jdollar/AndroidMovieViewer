@@ -54,23 +54,9 @@
     <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:id="@+id/responseScrollView"
-            android:scrollbars="vertical"
-            android:layout_weight="25">
-        <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text=""
-                android:id="@+id/responseTextView"/>
-        </ScrollView>
-
-    <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
             android:id="@+id/scrollView"
             android:scrollbars="vertical"
-            android:layout_weight="45">
+            android:layout_weight="70">
         <RadioGroup
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
