@@ -3,8 +3,10 @@ package org.dollarhide.androidmovieviewer.movieviewer;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import org.dollarhide.androidmovieviewer.util.ConfigurationManager;
 
 public abstract class BaseMovieViewerActivity extends ActionBarActivity {
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
