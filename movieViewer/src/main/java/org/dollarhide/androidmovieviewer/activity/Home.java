@@ -1,8 +1,9 @@
-package org.dollarhide.androidmovieviewer.movieviewer;
+package org.dollarhide.androidmovieviewer.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import org.dollarhide.androidmovieviewer.movieviewer.R;
 
 
 public class Home extends BaseMovieViewerActivity {

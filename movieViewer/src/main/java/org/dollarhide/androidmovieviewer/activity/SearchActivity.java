@@ -1,4 +1,4 @@
-package org.dollarhide.androidmovieviewer.movieviewer;
+package org.dollarhide.androidmovieviewer.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,9 +10,13 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import org.dollarhide.androidmovieviewer.movieviewer.R;
 import org.dollarhide.androidmovieviewer.service.SearchService;
+import org.dollarhide.androidmovieviewer.util.LoggingUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
 
 public class SearchActivity extends BaseMovieViewerActivity {
 
@@ -48,7 +52,11 @@ public class SearchActivity extends BaseMovieViewerActivity {
     }
 
     public void searchForMovie(View view) {
-        searchService.keywordSearch(this, keywordInput.getText().toString(), keywordSearchListener(), keywordSearchErrorListener());
+        try {
+            searchService.keywordSearch(this, keywordInput.getText().toString(), keywordSearchListener(), keywordSearchErrorListener());
+        } catch (UnsupportedEncodingException e) {
+            LoggingUtil.logException(TAG, e);
+        }
     }
 
     public void viewSelectionInformation(View view) {
@@ -84,19 +92,20 @@ public class SearchActivity extends BaseMovieViewerActivity {
             @Override
             public void onResponse(JSONObject response) {
                 try {
+                    //clear out previous results and makes items not selectable
                     hideSelectButton();
                     resultRadioGroup.removeAllViews();
 
-                    //shows the json response on the console in debug mode
-                    Log.d(TAG, response.toString());
+                    LoggingUtil.logDebug(TAG, "Response: " + response.toString());
 
+                    //populate results radio buttons
                     JSONArray resultList = (JSONArray) response.get("results");
                     for(int i = 0; i < resultList.length(); i++) {
                         JSONObject result = resultList.getJSONObject(i);
                         resultRadioGroup.addView(createResultRadioButton(Integer.parseInt(result.get("id").toString()), result.get("name").toString()));
                     }
                 } catch(Exception e) {
-                    Log.e(TAG, Log.getStackTraceString(e));
+                    LoggingUtil.logException(TAG, e);
                 }
             }
         };

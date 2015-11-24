@@ -1,11 +1,14 @@
-package org.dollarhide.androidmovieviewer.movieviewer;
+package org.dollarhide.androidmovieviewer.activity;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import org.dollarhide.androidmovieviewer.movieviewer.R;
 import org.dollarhide.androidmovieviewer.service.MovieService;
 import org.dollarhide.androidmovieviewer.task.CoverArtImageTask;
 import org.dollarhide.androidmovieviewer.util.LoggingUtil;
@@ -17,6 +20,7 @@ public class InformationActivity extends BaseMovieViewerActivity {
 
     private Integer movieId;
 
+    private ProgressBar progressBar;
     private TextView titleTextView;
     private TextView overviewTextView;
     private ImageView posterView;
@@ -27,6 +31,7 @@ public class InformationActivity extends BaseMovieViewerActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_information);
 
+        progressBar = (ProgressBar) findViewById(R.id.informationProgressBar);
         titleTextView = (TextView) findViewById(R.id.titleTextView);
         overviewTextView = (TextView) findViewById(R.id.overviewTextView);
         posterView = (ImageView) findViewById(R.id.posterView);
@@ -36,27 +41,45 @@ public class InformationActivity extends BaseMovieViewerActivity {
         Bundle passedInformation = getIntent().getExtras();
         movieId = (Integer) passedInformation.get("selectedEntertainmentId");
 
-        //FIXME: Check for this null pointer and return to search if found
-        movieService.getBasicInfo(this, movieId, basicInfoListener(), basicInfoErrorListener());
+        if (movieId == null) {
+            LoggingUtil.logDebug(TAG, "Movie ID is invalid");
+            this.finish();
+        }
+
+        movieService.getBasicInfo(this, movieId, basicInfoListener(this), basicInfoErrorListener());
 
         //Calls task for rest calls outside of UI thread
-        CoverArtImageTask coverArtImageTask = new CoverArtImageTask();
-        coverArtImageTask.execute(posterView, movieId.toString());
+        CoverArtImageTask coverArtImageTask = new CoverArtImageTask() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                progressBar.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            protected void onPostExecute(Object result) {
+                super.onPostExecute(result);
+                progressBar.setVisibility(View.GONE);
+            }
+        };
+
+        coverArtImageTask.execute(this.getBaseContext(), posterView, movieId.toString());
     }
 
-    private Response.Listener<JSONObject> basicInfoListener() {
+    private Response.Listener<JSONObject> basicInfoListener(final Activity activity) {
         return new Response.Listener<JSONObject>() {
 
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    Log.d(TAG, response.toString());
+                    LoggingUtil.logDebug(TAG, "Response: " + response.toString());
 
                     titleTextView.setText(response.get("original_title").toString());
                     overviewTextView.setText(response.get("overview").toString());
                 } catch(Exception e) {
-                    //TODO: Handle Server Error
-                    Log.e(TAG, Log.getStackTraceString(e));
+                    LoggingUtil.logDebug(TAG, "Error has occurred");
+                    activity.finish();
+                    LoggingUtil.logException(TAG, e);
                 }
             }
         };

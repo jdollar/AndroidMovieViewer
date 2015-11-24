@@ -1,9 +1,9 @@
-package org.dollarhide.androidmovieviewer.movieviewer;
+package org.dollarhide.androidmovieviewer.activity;
 
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import org.dollarhide.androidmovieviewer.util.ConfigurationManager;
+import org.dollarhide.androidmovieviewer.movieviewer.R;
 
 public abstract class BaseMovieViewerActivity extends ActionBarActivity {
 
