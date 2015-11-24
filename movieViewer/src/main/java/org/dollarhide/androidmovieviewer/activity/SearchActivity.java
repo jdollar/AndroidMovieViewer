@@ -10,6 +10,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import org.dollarhide.androidmovieviewer.model.SearchCriteria;
+import org.dollarhide.androidmovieviewer.model.SearchResults;
 import org.dollarhide.androidmovieviewer.movieviewer.R;
 import org.dollarhide.androidmovieviewer.service.SearchService;
 import org.dollarhide.androidmovieviewer.util.LoggingUtil;
@@ -22,11 +24,19 @@ public class SearchActivity extends BaseMovieViewerActivity {
 
     private static String TAG = "SearchActivity";
 
-    private SearchService searchService;
+    private static final int INITIAL_PAGE_NUMBER = 1;
 
+    //activity members
+    private SearchService searchService;
+    private SearchCriteria searchCriteria;
+    private SearchResults searchResults;
+
+    //page inputs
     private EditText titleInput;
     private RadioGroup resultRadioGroup;
     private Button selectButton;
+    private Button prevPageButton;
+    private Button nextPageButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +48,8 @@ public class SearchActivity extends BaseMovieViewerActivity {
         titleInput = (EditText) findViewById(R.id.searchTitleText);
         resultRadioGroup = (RadioGroup) findViewById(R.id.result_radio_group);
         selectButton = (Button) findViewById(R.id.select_button);
+        prevPageButton = (Button) findViewById(R.id.prev_page_button);
+        nextPageButton = (Button) findViewById(R.id.next_page_button);
 
         resultRadioGroup.setOnCheckedChangeListener(
                 new RadioGroup.OnCheckedChangeListener() {
@@ -52,11 +64,36 @@ public class SearchActivity extends BaseMovieViewerActivity {
     }
 
     public void searchForMovie(View view) {
+        populateSearchCriteria(titleInput.getText().toString(), INITIAL_PAGE_NUMBER);
+        callMovieSearch();
+    }
+
+    public void searchForMovieWithPageNumber(int newPageNumber) {
+        String previousTitleSearch = searchCriteria.getMovieTitle();
+        populateSearchCriteria(previousTitleSearch, newPageNumber);
+        callMovieSearch();
+    }
+
+    public void viewNextPage(View view) {
+        searchForMovieWithPageNumber(searchCriteria.getPageNumber() + 1);
+    }
+
+    public void viewPrevPage(View view) {
+        searchForMovieWithPageNumber(searchCriteria.getPageNumber() - 1);
+    }
+
+    private void callMovieSearch() {
         try {
-            searchService.movieSearch(this, titleInput.getText().toString(), movieSearchListener(), logStackTraceErrorListener());
+            searchService.movieSearch(this, searchCriteria, movieSearchListener(), logStackTraceErrorListener());
         } catch (UnsupportedEncodingException e) {
             LoggingUtil.logException(TAG, e);
         }
+    }
+
+    private void populateSearchCriteria(String movieTitle, int pageNumber) {
+        searchCriteria = new SearchCriteria();
+        searchCriteria.setMovieTitle(movieTitle);
+        searchCriteria.setPageNumber(pageNumber);
     }
 
     public void viewSelectionInformation(View view) {
@@ -70,6 +107,7 @@ public class SearchActivity extends BaseMovieViewerActivity {
     }
 
     public void clearInputFields(View view) {
+        titleInput.setText("");
         hideSelectButton();
         resultRadioGroup.removeAllViews();
     }
@@ -91,18 +129,28 @@ public class SearchActivity extends BaseMovieViewerActivity {
             @Override
             public void onResponse(JSONObject response) {
                 try {
+                    searchResults = new SearchResults();
+
                     //clear out previous results and makes items not selectable
                     hideSelectButton();
                     resultRadioGroup.removeAllViews();
 
                     LoggingUtil.logDebug(TAG, "Response: " + response.toString());
 
+                    //get the current page number and total number of pages possible
+                    searchResults.setCurrentPageNumber(response.getInt("page"));
+                    searchResults.setTotalPages(response.getInt("total_pages"));
+
                     //populate results radio buttons
                     JSONArray resultList = (JSONArray) response.get("results");
                     for(int i = 0; i < resultList.length(); i++) {
                         JSONObject result = resultList.getJSONObject(i);
-                        resultRadioGroup.addView(createResultRadioButton(Integer.parseInt(result.get("id").toString()), result.get("title").toString()));
+
+                        searchResults.addResults(result.getString("id"), result.getString("title"));
+                        resultRadioGroup.addView(createResultRadioButton(result.getInt("id"), result.getString("title")));
                     }
+
+                    showHidePageButtons();
                 } catch(Exception e) {
                     LoggingUtil.logException(TAG, e);
                 }
@@ -118,5 +166,19 @@ public class SearchActivity extends BaseMovieViewerActivity {
                 Log.e(TAG, error.toString());
             }
         };
+    }
+
+    private void showHidePageButtons() {
+        if(searchResults.getTotalPages() <= searchResults.getCurrentPageNumber()) {
+            nextPageButton.setVisibility(View.INVISIBLE);
+        } else {
+            nextPageButton.setVisibility(View.VISIBLE);
+        }
+
+        if (searchResults.getCurrentPageNumber() <= INITIAL_PAGE_NUMBER) {
+            prevPageButton.setVisibility(View.INVISIBLE);
+        } else {
+            prevPageButton.setVisibility(View.VISIBLE);
+        }
     }
 }

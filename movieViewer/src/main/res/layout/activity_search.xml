@@ -57,13 +57,41 @@
             android:layout_height="0dp"
             android:id="@+id/scrollView"
             android:scrollbars="vertical"
-            android:layout_weight="70">
+            android:layout_weight="60">
         <RadioGroup
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/result_radio_group">
         </RadioGroup>
     </ScrollView>
+
+    <TableLayout android:layout_width="match_parent"
+                 android:layout_height="0dp"
+                 android:layout_weight="10">
+        <TableRow
+            android:weightSum="100" >
+            <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="@string/prev_page_button"
+                    android:id="@+id/prev_page_button"
+                    android:clickable="true"
+                    android:onClick="viewPrevPage"
+                    android:visibility="invisible"
+                    android:layout_weight="50"/>
+            <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="@string/next_page_button"
+                    android:id="@+id/next_page_button"
+                    android:clickable="true"
+                    android:onClick="viewNextPage"
+                    android:visibility="invisible"
+                    android:layout_weight="50"/>
+        </TableRow>
+    </TableLayout>
 
     <Button
             style="?android:attr/buttonStyleSmall"

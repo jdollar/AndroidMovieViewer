@@ -10,4 +10,6 @@
     <string name="settings_button">Settings</string>
     <string name="reset_button">Reset</string>
     <string name="select_button">Select</string>
+    <string name="prev_page_button">Previous Page</string>
+    <string name="next_page_button">Next Page</string>
 </resources>
