@@ -68,18 +68,37 @@ public class SearchActivity extends BaseMovieViewerActivity {
         callMovieSearch();
     }
 
-    public void searchForMovieWithPageNumber(int newPageNumber) {
-        String previousTitleSearch = searchCriteria.getMovieTitle();
-        populateSearchCriteria(previousTitleSearch, newPageNumber);
-        callMovieSearch();
-    }
-
     public void viewNextPage(View view) {
         searchForMovieWithPageNumber(searchCriteria.getPageNumber() + 1);
     }
 
     public void viewPrevPage(View view) {
         searchForMovieWithPageNumber(searchCriteria.getPageNumber() - 1);
+    }
+
+    public void searchForMovieWithPageNumber(int newPageNumber) {
+        String previousTitleSearch = searchCriteria.getMovieTitle();
+        populateSearchCriteria(previousTitleSearch, newPageNumber);
+        callMovieSearch();
+    }
+
+    public void viewSelectionInformation(View view) {
+        Intent informationIntent = new Intent(this, InformationActivity.class);
+        Bundle selectedEntertainment = new Bundle();
+
+        selectedEntertainment.putInt("selectedEntertainmentId", resultRadioGroup.getCheckedRadioButtonId());
+        informationIntent.putExtras(selectedEntertainment);
+
+        startActivity(informationIntent);
+    }
+
+    public void clearInputFields(View view) {
+        hideSelectButton();
+        showHidePageButtons();
+        titleInput.setText("");
+        searchCriteria = null;
+        searchResults = null;
+        resultRadioGroup.removeAllViews();
     }
 
     private void callMovieSearch() {
@@ -94,22 +113,6 @@ public class SearchActivity extends BaseMovieViewerActivity {
         searchCriteria = new SearchCriteria();
         searchCriteria.setMovieTitle(movieTitle);
         searchCriteria.setPageNumber(pageNumber);
-    }
-
-    public void viewSelectionInformation(View view) {
-        Intent informationIntent = new Intent(this, InformationActivity.class);
-        Bundle selectedEntertainment = new Bundle();
-
-        selectedEntertainment.putInt("selectedEntertainmentId", resultRadioGroup.getCheckedRadioButtonId());
-        informationIntent.putExtras(selectedEntertainment);
-
-        startActivity(informationIntent);
-    }
-
-    public void clearInputFields(View view) {
-        titleInput.setText("");
-        hideSelectButton();
-        resultRadioGroup.removeAllViews();
     }
 
     private RadioButton createResultRadioButton(int id, String label) {
@@ -163,19 +166,19 @@ public class SearchActivity extends BaseMovieViewerActivity {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, error.toString());
+                LoggingUtil.logException(TAG, error);
             }
         };
     }
 
     private void showHidePageButtons() {
-        if(searchResults.getTotalPages() <= searchResults.getCurrentPageNumber()) {
+        if(searchResults == null || searchResults.getTotalPages() <= searchResults.getCurrentPageNumber()) {
             nextPageButton.setVisibility(View.INVISIBLE);
         } else {
             nextPageButton.setVisibility(View.VISIBLE);
         }
 
-        if (searchResults.getCurrentPageNumber() <= INITIAL_PAGE_NUMBER) {
+        if (searchResults == null || searchResults.getCurrentPageNumber() <= INITIAL_PAGE_NUMBER) {
             prevPageButton.setVisibility(View.INVISIBLE);
         } else {
             prevPageButton.setVisibility(View.VISIBLE);
