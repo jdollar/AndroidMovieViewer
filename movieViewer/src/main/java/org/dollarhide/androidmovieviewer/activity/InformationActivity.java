@@ -1,6 +1,7 @@
 package org.dollarhide.androidmovieviewer.activity;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -8,6 +9,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.squareup.picasso.Picasso;
 import org.dollarhide.androidmovieviewer.movieviewer.R;
 import org.dollarhide.androidmovieviewer.service.MovieService;
 import org.dollarhide.androidmovieviewer.task.CoverArtImageTask;
@@ -59,6 +61,8 @@ public class InformationActivity extends BaseMovieViewerActivity {
             @Override
             protected void onPostExecute(Object result) {
                 super.onPostExecute(result);
+                LoggingUtil.logDebug(TAG, "Image Url Result: " + result);
+                posterView.setImageBitmap((Bitmap) result);
                 progressBar.setVisibility(View.GONE);
             }
         };

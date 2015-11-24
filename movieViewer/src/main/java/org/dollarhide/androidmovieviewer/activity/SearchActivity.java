@@ -24,7 +24,7 @@ public class SearchActivity extends BaseMovieViewerActivity {
 
     private SearchService searchService;
 
-    private EditText keywordInput;
+    private EditText titleInput;
     private RadioGroup resultRadioGroup;
     private Button selectButton;
 
@@ -35,7 +35,7 @@ public class SearchActivity extends BaseMovieViewerActivity {
 
         searchService = new SearchService();
 
-        keywordInput = (EditText) findViewById(R.id.searchText);
+        titleInput = (EditText) findViewById(R.id.searchTitleText);
         resultRadioGroup = (RadioGroup) findViewById(R.id.result_radio_group);
         selectButton = (Button) findViewById(R.id.select_button);
 
@@ -53,7 +53,7 @@ public class SearchActivity extends BaseMovieViewerActivity {
 
     public void searchForMovie(View view) {
         try {
-            searchService.keywordSearch(this, keywordInput.getText().toString(), keywordSearchListener(), keywordSearchErrorListener());
+            searchService.movieSearch(this, titleInput.getText().toString(), movieSearchListener(), logStackTraceErrorListener());
         } catch (UnsupportedEncodingException e) {
             LoggingUtil.logException(TAG, e);
         }
@@ -70,7 +70,6 @@ public class SearchActivity extends BaseMovieViewerActivity {
     }
 
     public void clearInputFields(View view) {
-        keywordInput.setText("");
         hideSelectButton();
         resultRadioGroup.removeAllViews();
     }
@@ -86,7 +85,7 @@ public class SearchActivity extends BaseMovieViewerActivity {
         selectButton.setVisibility(View.INVISIBLE);
     }
 
-    private Response.Listener<JSONObject> keywordSearchListener() {
+    private Response.Listener<JSONObject> movieSearchListener() {
         return new Response.Listener<JSONObject>() {
 
             @Override
@@ -102,7 +101,7 @@ public class SearchActivity extends BaseMovieViewerActivity {
                     JSONArray resultList = (JSONArray) response.get("results");
                     for(int i = 0; i < resultList.length(); i++) {
                         JSONObject result = resultList.getJSONObject(i);
-                        resultRadioGroup.addView(createResultRadioButton(Integer.parseInt(result.get("id").toString()), result.get("name").toString()));
+                        resultRadioGroup.addView(createResultRadioButton(Integer.parseInt(result.get("id").toString()), result.get("title").toString()));
                     }
                 } catch(Exception e) {
                     LoggingUtil.logException(TAG, e);
@@ -111,7 +110,7 @@ public class SearchActivity extends BaseMovieViewerActivity {
         };
     }
 
-    private Response.ErrorListener keywordSearchErrorListener() {
+    private Response.ErrorListener logStackTraceErrorListener() {
         return new Response.ErrorListener() {
 
             @Override

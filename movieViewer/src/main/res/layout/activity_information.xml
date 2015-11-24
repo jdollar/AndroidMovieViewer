@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent" android:weightSum="1">
+              android:layout_height="match_parent"
+              android:weightSum="1">
     <ProgressBar
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="144dp"
@@ -14,8 +15,11 @@
     <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:id="@+id/titleTextView"
-            android:layout_gravity="center_horizontal" android:textSize="40dp" android:textIsSelectable="true"
+            android:layout_gravity="center_horizontal"
+            android:textSize="40dp"
+            android:textIsSelectable="true"
             android:gravity="center_horizontal"/>
     <ImageView
             android:layout_width="wrap_content"
@@ -24,7 +28,9 @@
             android:layout_gravity="center_horizontal"/>
     <TextView
             android:layout_width="match_parent"
+            android:layout_margin="10dp"
             android:layout_height="wrap_content"
-            android:text=""
-            android:id="@+id/overviewTextView"/>
+            android:background="@drawable/border"
+            android:id="@+id/overviewTextView"
+            android:textSize="20dp"/>
 </LinearLayout>

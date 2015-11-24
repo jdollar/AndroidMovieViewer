@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.widget.ImageView;
+import com.squareup.picasso.Picasso;
 import org.dollarhide.androidmovieviewer.model.Configuration;
 import org.dollarhide.androidmovieviewer.service.ImageService;
 import org.dollarhide.androidmovieviewer.util.ConfigurationManager;
@@ -12,6 +13,7 @@ import org.dollarhide.androidmovieviewer.util.LoggingUtil;
 
 import java.net.URL;
 import java.util.Iterator;
+import java.util.Set;
 
 public class CoverArtImageTask extends AsyncTask {
     private static final String TAG = "CoverArtImageTask";
@@ -39,22 +41,17 @@ public class CoverArtImageTask extends AsyncTask {
                 String movieId = (String) params[2];
 
                 try {
-                    String bitmapUrl = imageService.getBitmapUrl(baseContext, movieId);
-                    imageToDisplay = coverArtExecute(baseContext, bitmapUrl);
+                    String imagePath = imageService.getBitmapUrl(baseContext, movieId);
+                    imageToDisplay = coverArtExecute(baseContext, imagePath);
                 } catch (Exception e) {
                     LoggingUtil.logException(TAG, e);
                 }
             } else {
-                LoggingUtil.logDebug(TAG, "Params are not expected for Cover Art Retrieval [ImageView, String]");
+                LoggingUtil.logDebug(TAG, "Params are not expected for Cover Art Retrieval [Context, ImageView, String]");
             }
         }
 
         return imageToDisplay;
-    }
-
-    @Override
-    protected void onPostExecute(Object imageToDisplay) {
-        posterView.setImageBitmap((Bitmap) imageToDisplay);
     }
 
     private Bitmap coverArtExecute(Context baseContext, String imagePath) {
@@ -68,15 +65,7 @@ public class CoverArtImageTask extends AsyncTask {
 
         try {
             Configuration configuration = configurationManager.getConfiguration(baseContext);
-            String posterSize = DEFAULT_POSTER_SIZE;
-
-            if (!configuration.getPosterSizes().contains(DEFAULT_POSTER_SIZE)) {
-                //if the default poster size isn't available use the first available size
-                for (Iterator<String> posterIt = configuration.getPosterSizes().iterator(); posterIt.hasNext();) {
-                    posterSize = posterIt.next();
-                    break;
-                }
-            }
+            String posterSize = getPosterSize(configuration.getPosterSizes());
 
             //retrieve bitmap from the specified url. Poster size required.
             URL imageUrl = new URL(configuration.getBaseImageUrl() + posterSize + imagePath);
@@ -86,6 +75,19 @@ public class CoverArtImageTask extends AsyncTask {
         }
 
         return imageToDisplay;
+    }
+
+    private String getPosterSize(Set<String> posterSizes) {
+        String posterSize = DEFAULT_POSTER_SIZE;
+
+        //if the default poster size isn't available use the first available size
+        if (!posterSizes.contains(DEFAULT_POSTER_SIZE)) {
+            for (Iterator<String> posterIt = posterSizes.iterator(); posterIt.hasNext();) {
+                return posterIt.next();
+            }
+        }
+
+        return posterSize;
     }
 
     private boolean checkParamTypes(Object[] params) {

@@ -9,19 +9,20 @@
             android:layout_height="0dp"
             android:layout_weight="25"
             android:weightSum="100">
+
         <TableRow>
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/search_keyword_label"
-                    android:id="@+id/searchLbl"
+                    android:text="@string/search_title_label"
+                    android:id="@+id/searchTitleLbl"
                     android:textSize="30dp"
                     android:layout_column="0"
                     android:layout_weight="30"/>
             <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/searchText"
+                    android:id="@+id/searchTitleText"
                     android:inputType="text"
                     android:layout_column="1"
                     android:layout_weight="70"/>
