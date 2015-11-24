@@ -1,29 +1,26 @@
 package org.dollarhide.androidmovieviewer.movieviewer;
 
-import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import org.dollarhide.androidmovieviewer.service.InformationService;
-import org.json.JSONArray;
+import org.dollarhide.androidmovieviewer.service.MovieService;
+import org.dollarhide.androidmovieviewer.task.CoverArtImageTask;
+import org.dollarhide.androidmovieviewer.util.LoggingUtil;
 import org.json.JSONObject;
-
-import java.net.URL;
 
 public class InformationActivity extends BaseMovieViewerActivity {
     private static String TAG = "InformationActivity";
+    private static final String CONFIG_SERVICE_URL = "configuration";
 
     private Integer movieId;
 
     private TextView titleTextView;
     private TextView overviewTextView;
     private ImageView posterView;
-    private InformationService informationService;
+    private MovieService movieService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,14 +31,17 @@ public class InformationActivity extends BaseMovieViewerActivity {
         overviewTextView = (TextView) findViewById(R.id.overviewTextView);
         posterView = (ImageView) findViewById(R.id.posterView);
 
-        informationService = new InformationService();
+        movieService = new MovieService();
 
         Bundle passedInformation = getIntent().getExtras();
         movieId = (Integer) passedInformation.get("selectedEntertainmentId");
 
         //FIXME: Check for this null pointer and return to search if found
-        informationService.getBasicInfo(this, movieId, basicInfoListener(), basicInfoErrorListener());
-        informationService.getCoverArt(this, movieId, coverArtListener(this), coverArtErrorListener());
+        movieService.getBasicInfo(this, movieId, basicInfoListener(), basicInfoErrorListener());
+
+        //Calls task for rest calls outside of UI thread
+        CoverArtImageTask coverArtImageTask = new CoverArtImageTask();
+        coverArtImageTask.execute(posterView, movieId.toString());
     }
 
     private Response.Listener<JSONObject> basicInfoListener() {
@@ -67,63 +67,8 @@ public class InformationActivity extends BaseMovieViewerActivity {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, error.toString());
+                LoggingUtil.logException(TAG, error);
             }
         };
-    }
-
-    private Response.Listener<JSONObject> coverArtListener(final Activity activity) {
-        return new Response.Listener<JSONObject>() {
-
-            @Override
-            public void onResponse(JSONObject response) {
-                String imagePath = getImagePathFromResponse(response);
-                try {
-                    //FIXME: Won't work. Needs to get configuration synchronously
-                    URL imageUrl = new URL(informationService.getConfigurationManager(activity).getBaseImageUrl() + cleanImagePath(imagePath));
-                    Bitmap imageToDisplay = BitmapFactory.decodeStream(imageUrl.openConnection().getInputStream());
-                    posterView.setImageBitmap(imageToDisplay);
-                } catch (Exception e) {
-                    Log.e(TAG, Log.getStackTraceString(e));
-                }
-            }
-        };
-    }
-
-    private Response.ErrorListener coverArtErrorListener() {
-        return new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, error.toString());
-            }
-        };
-    }
-
-    private String getImagePathFromResponse(JSONObject response) {
-        String imagePath = null;
-        try {
-            JSONArray posters = response.getJSONArray("posters");
-            if (posters != null) {
-                for(int i = 0; i < posters.length(); i++) {
-                    JSONObject poster = posters.getJSONObject(i);
-                    if (poster != null && !"".equals(poster.get("file_path"))) {
-                        return poster.get("file_path").toString();
-                    }
-                }
-            }
-        } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
-        }
-
-        return imagePath;
-    }
-
-    private String cleanImagePath(String imagePath) {
-        if(imagePath != null && imagePath.matches("^/")) {
-            imagePath = imagePath.substring(1);
-        }
-
-        return imagePath;
     }
 }
