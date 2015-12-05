@@ -1,7 +1,7 @@
 package org.dollarhide.androidmovieviewer.task;
 
 import android.os.AsyncTask;
-import android.util.Log;
+import org.dollarhide.androidmovieviewer.util.LoggingUtil;
 
 public abstract class BaseTask extends AsyncTask {
 
@@ -12,7 +12,7 @@ public abstract class BaseTask extends AsyncTask {
             return true;
         }
 
-        Log.d(tag, "Incorrect number of params found. Expecting " + expectedParamLength + ", but actually " + params.length);
+        LoggingUtil.logDebug(tag, "Incorrect number of params found. Expecting " + expectedParamLength + ", but actually " + params.length);
         return false;
     }
 }

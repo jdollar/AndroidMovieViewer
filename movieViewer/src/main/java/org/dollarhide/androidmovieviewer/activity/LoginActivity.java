@@ -2,7 +2,6 @@ package org.dollarhide.androidmovieviewer.activity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TableRow;
@@ -10,6 +9,7 @@ import android.widget.TextView;
 import org.dollarhide.androidmovieviewer.model.RestResult;
 import org.dollarhide.androidmovieviewer.movieviewer.R;
 import org.dollarhide.androidmovieviewer.task.LoginTask;
+import org.dollarhide.androidmovieviewer.util.LoggingUtil;
 
 public class LoginActivity extends BaseMovieViewerActivity {
     private static final String TAG = "LoginActivity";
@@ -37,7 +37,7 @@ public class LoginActivity extends BaseMovieViewerActivity {
     }
 
     public void submitLogin(View view) {
-        Log.d(TAG, "Submitting Login");
+        LoggingUtil.logDebug(TAG, "Submitting Login");
 
         //FIXME beginning will only use cleartext password
         String username = usernameInput.getText().toString();
@@ -59,12 +59,9 @@ public class LoginActivity extends BaseMovieViewerActivity {
                     //if it is a success should have a session id as a string in the data
                     String sessionId = (String) ((RestResult) result).getData();
 
-                    Log.d(TAG, "Session id received: " + sessionId);
+                    LoggingUtil.logDebug(TAG, "Session id received: " + sessionId);
                     //save session id in shared preference file
-                    SharedPreferences sharedPreferences = getSharedPreferences(PREF_FILE, 0);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("session_id", sessionId);
-                    editor.commit();
+                    updateSharedPreference(sessionId);
 
                     updateBanner(successRow, successTextView, "Logged in successfully!", View.VISIBLE);
                 } else {
@@ -74,6 +71,13 @@ public class LoginActivity extends BaseMovieViewerActivity {
         };
 
         loginTask.execute(username, password);
+    }
+
+    private void updateSharedPreference(String sessionId) {
+        SharedPreferences sharedPreferences = getMovieViewerSharedPreferences();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("session_id", sessionId);
+        editor.commit();
     }
 
     private void clearBanners() {

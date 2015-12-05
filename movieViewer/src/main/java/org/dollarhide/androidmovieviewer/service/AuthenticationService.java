@@ -4,6 +4,7 @@ import android.util.Log;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.dollarhide.androidmovieviewer.model.RestResult;
+import org.dollarhide.androidmovieviewer.util.LoggingUtil;
 import org.dollarhide.androidmovieviewer.util.ResourcePropertyReader;
 import org.dollarhide.androidmovieviewer.util.ResponseParserUtil;
 import org.json.JSONException;
@@ -47,7 +48,12 @@ public class AuthenticationService extends BaseService {
         HttpGet httpGet = new HttpGet(url);
         HttpResponse httpResponse = getHttpClient().execute(httpGet);
 
-        JSONObject jsonObject = ResponseParserUtil.readHttpResponseToJson(httpResponse);
-        return new RestResult(jsonObject.getBoolean(SUCCESS_PARAM), jsonObject.getString(returnData));
+        if (httpResponse.getStatusLine().getStatusCode() == 200) {
+            JSONObject jsonObject = ResponseParserUtil.readHttpResponseToJson(httpResponse);
+            return new RestResult(jsonObject.getBoolean(SUCCESS_PARAM), jsonObject.getString(returnData));
+        }
+
+        LoggingUtil.logDebug(TAG, "Bad response. Status code: " + httpResponse.getStatusLine().getStatusCode());
+        return new RestResult(Boolean.FALSE, null);
     }
 }

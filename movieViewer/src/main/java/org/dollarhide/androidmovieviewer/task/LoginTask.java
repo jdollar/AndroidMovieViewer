@@ -1,8 +1,8 @@
 package org.dollarhide.androidmovieviewer.task;
 
-import android.util.Log;
 import org.dollarhide.androidmovieviewer.model.RestResult;
 import org.dollarhide.androidmovieviewer.service.AuthenticationService;
+import org.dollarhide.androidmovieviewer.util.LoggingUtil;
 
 public class LoginTask extends BaseTask {
 
@@ -22,7 +22,7 @@ public class LoginTask extends BaseTask {
         }
 
         if (!checkParamTypes(params)) {
-            Log.d(TAG, "Incorrect Param types for specified task. Expecting String, String");
+            LoggingUtil.logDebug(TAG, "Incorrect Param types for specified task. Expecting String, String");
             return new RestResult(Boolean.FALSE, null);
         }
 
@@ -51,7 +51,7 @@ public class LoginTask extends BaseTask {
             //on rest api
             return  authenticationService.getSessionId(requestToken);
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            LoggingUtil.logException(TAG, e);
         }
 
         //send back a result with a false to tell the UI that a error has happened
