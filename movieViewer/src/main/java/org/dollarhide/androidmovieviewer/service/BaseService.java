@@ -35,4 +35,12 @@ public abstract class BaseService {
 
         return httpClient;
     }
+
+    public void setRequestQueue(RequestQueue requestQueue) {
+        this.requestQueue = requestQueue;
+    }
+
+    public void setHttpClient(HttpClient httpClient) {
+        this.httpClient = httpClient;
+    }
 }

@@ -22,9 +22,8 @@ public class ConfigurationService extends BaseService {
         String configurationUrl = getBaseUrl(baseContext) + CONFIG_SERVICE_URL + "?" + getApiKeyRequestParam(baseContext);
         LoggingUtil.logDebug(TAG, "Sending: " + configurationUrl);
 
-        HttpClient httpClient = new DefaultHttpClient();
         HttpGet httpGet = new HttpGet(configurationUrl);
-        HttpResponse httpResponse = httpClient.execute(httpGet);
+        HttpResponse httpResponse = getHttpClient().execute(httpGet);
 
         JSONObject jsonObject = ResponseParserUtil.readHttpResponseToJson(httpResponse);
         return jsonObject;

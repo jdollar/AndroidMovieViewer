@@ -2,7 +2,6 @@ package org.dollarhide.androidmovieviewer.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -183,5 +182,30 @@ public class SearchActivity extends BaseMovieViewerActivity {
         } else {
             prevPageButton.setVisibility(View.VISIBLE);
         }
+    }
+
+    //Getters and Setters
+    public EditText getTitleInput() {
+        return titleInput;
+    }
+
+    public SearchService getSearchService() {
+        return searchService;
+    }
+
+    public RadioGroup getResultRadioGroup() {
+        return resultRadioGroup;
+    }
+
+    public Button getSelectButton() {
+        return selectButton;
+    }
+
+    public Button getNextPageButton() {
+        return nextPageButton;
+    }
+
+    public Button getPrevPageButton() {
+        return prevPageButton;
     }
 }

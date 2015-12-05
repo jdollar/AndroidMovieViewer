@@ -1,4 +1,4 @@
-package org.dollarhide.androidmovieviewer.activity;
+package org.dollarhide.activity;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
