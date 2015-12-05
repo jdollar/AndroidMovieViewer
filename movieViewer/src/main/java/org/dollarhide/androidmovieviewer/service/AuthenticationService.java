@@ -1,6 +1,5 @@
 package org.dollarhide.androidmovieviewer.service;
 
-import android.util.Log;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.dollarhide.androidmovieviewer.model.RestResult;
@@ -43,7 +42,7 @@ public class AuthenticationService extends BaseService {
         String urlProperty = ResourcePropertyReader.getProperty(serviceUrl);
         String url = getBaseUrl() + MessageFormat.format(urlProperty, params);
 
-        Log.d(TAG, "Sending url: " + url);
+        LoggingUtil.logDebug(TAG, "Sending url: " + url);
 
         HttpGet httpGet = new HttpGet(url);
         HttpResponse httpResponse = getHttpClient().execute(httpGet);
