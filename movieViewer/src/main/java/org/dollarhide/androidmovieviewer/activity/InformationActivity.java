@@ -9,7 +9,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.squareup.picasso.Picasso;
 import org.dollarhide.androidmovieviewer.movieviewer.R;
 import org.dollarhide.androidmovieviewer.service.MovieService;
 import org.dollarhide.androidmovieviewer.task.CoverArtImageTask;
@@ -67,7 +66,7 @@ public class InformationActivity extends BaseMovieViewerActivity {
             }
         };
 
-        coverArtImageTask.execute(this.getBaseContext(), posterView, movieId.toString());
+        coverArtImageTask.execute(posterView, movieId.toString());
     }
 
     private Response.Listener<JSONObject> basicInfoListener(final Activity activity) {

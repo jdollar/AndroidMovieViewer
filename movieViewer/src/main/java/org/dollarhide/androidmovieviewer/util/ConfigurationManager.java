@@ -1,6 +1,5 @@
 package org.dollarhide.androidmovieviewer.util;
 
-import android.content.Context;
 import org.dollarhide.androidmovieviewer.model.Configuration;
 import org.dollarhide.androidmovieviewer.service.ConfigurationService;
 import org.json.JSONArray;
@@ -20,19 +19,19 @@ public class ConfigurationManager {
         configurationService = new ConfigurationService();
     }
 
-    public Configuration getConfiguration(Context baseContext) {
+    public Configuration getConfiguration() {
         if (configuration == null) {
-            configuration = populateConfiguration(baseContext);
+            configuration = populateConfiguration();
         }
 
         return configuration;
     }
 
-    public Configuration populateConfiguration(Context baseContext) {
+    public Configuration populateConfiguration() {
         Configuration newConfiguration = new Configuration();
 
         try {
-            JSONObject jsonObject = configurationService.getConfiguration(baseContext);
+            JSONObject jsonObject = configurationService.getConfiguration();
 
             //Main object in json response is images
             JSONObject imagesObject = jsonObject.getJSONObject("images");

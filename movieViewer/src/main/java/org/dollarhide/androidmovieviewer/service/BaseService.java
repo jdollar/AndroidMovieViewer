@@ -1,7 +1,6 @@
 package org.dollarhide.androidmovieviewer.service;
 
 import android.app.Activity;
-import android.content.Context;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import org.apache.http.client.HttpClient;
@@ -20,12 +19,12 @@ public abstract class BaseService {
         return requestQueue;
     }
 
-    protected String getApiKeyRequestParam(Context baseContext) {
-        return "api_key=" + ResourcePropertyReader.getApiKey(baseContext);
+    protected String getApiKeyRequestParam() {
+        return "api_key=" + ResourcePropertyReader.getApiKey();
     }
 
-    protected String getBaseUrl(Context baseContext) {
-        return ResourcePropertyReader.getBaseApiUrl(baseContext);
+    protected String getBaseUrl() {
+        return ResourcePropertyReader.getBaseApiUrl();
     }
 
     protected HttpClient getHttpClient() {

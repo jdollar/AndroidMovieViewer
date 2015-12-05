@@ -1,11 +1,9 @@
 package org.dollarhide.androidmovieviewer.task;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.widget.ImageView;
-import com.squareup.picasso.Picasso;
 import org.dollarhide.androidmovieviewer.model.Configuration;
 import org.dollarhide.androidmovieviewer.service.ImageService;
 import org.dollarhide.androidmovieviewer.util.ConfigurationManager;
@@ -17,7 +15,7 @@ import java.util.Set;
 
 public class CoverArtImageTask extends AsyncTask {
     private static final String TAG = "CoverArtImageTask";
-    private static final int EXPECTED_PARAM_SIZE = 3;
+    private static final int EXPECTED_PARAM_SIZE = 2;
     private static final String DEFAULT_POSTER_SIZE = "w500";
 
     private ConfigurationManager configurationManager;
@@ -36,13 +34,12 @@ public class CoverArtImageTask extends AsyncTask {
 
         if (params != null && params.length == EXPECTED_PARAM_SIZE) {
             if (checkParamTypes(params)) {
-                Context baseContext = (Context) params[0];
-                posterView = (ImageView) params[1];
-                String movieId = (String) params[2];
+                posterView = (ImageView) params[0];
+                String movieId = (String) params[1];
 
                 try {
-                    String imagePath = imageService.getBitmapUrl(baseContext, movieId);
-                    imageToDisplay = coverArtExecute(baseContext, imagePath);
+                    String imagePath = imageService.getBitmapUrl(movieId);
+                    imageToDisplay = coverArtExecute(imagePath);
                 } catch (Exception e) {
                     LoggingUtil.logException(TAG, e);
                 }
@@ -54,7 +51,7 @@ public class CoverArtImageTask extends AsyncTask {
         return imageToDisplay;
     }
 
-    private Bitmap coverArtExecute(Context baseContext, String imagePath) {
+    private Bitmap coverArtExecute(String imagePath) {
         Bitmap imageToDisplay = null;
 
         LoggingUtil.logDebug(TAG, "Image Path: " + imagePath);
@@ -64,7 +61,7 @@ public class CoverArtImageTask extends AsyncTask {
         }
 
         try {
-            Configuration configuration = configurationManager.getConfiguration(baseContext);
+            Configuration configuration = configurationManager.getConfiguration();
             String posterSize = getPosterSize(configuration.getPosterSizes());
 
             //retrieve bitmap from the specified url. Poster size required.
@@ -91,8 +88,7 @@ public class CoverArtImageTask extends AsyncTask {
     }
 
     private boolean checkParamTypes(Object[] params) {
-        return params[0] instanceof Context
-                && params[1] instanceof ImageView
-                && params[2] instanceof String;
+        return params[0] instanceof ImageView
+                && params[1] instanceof String;
     }
 }

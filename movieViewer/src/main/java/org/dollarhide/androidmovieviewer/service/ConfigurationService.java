@@ -1,10 +1,7 @@
 package org.dollarhide.androidmovieviewer.service;
 
-import android.content.Context;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.dollarhide.androidmovieviewer.util.LoggingUtil;
 import org.dollarhide.androidmovieviewer.util.ResponseParserUtil;
 import org.json.JSONException;
@@ -18,8 +15,8 @@ public class ConfigurationService extends BaseService {
 
     private static final String CONFIG_SERVICE_URL = "configuration";
 
-    public JSONObject getConfiguration(Context baseContext) throws IOException, JSONException {
-        String configurationUrl = getBaseUrl(baseContext) + CONFIG_SERVICE_URL + "?" + getApiKeyRequestParam(baseContext);
+    public JSONObject getConfiguration() throws IOException, JSONException {
+        String configurationUrl = getBaseUrl() + CONFIG_SERVICE_URL + "?" + getApiKeyRequestParam();
         LoggingUtil.logDebug(TAG, "Sending: " + configurationUrl);
 
         HttpGet httpGet = new HttpGet(configurationUrl);

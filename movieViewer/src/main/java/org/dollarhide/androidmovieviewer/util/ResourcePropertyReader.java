@@ -1,6 +1,7 @@
 package org.dollarhide.androidmovieviewer.util;
 
 import android.content.Context;
+import org.dollarhide.androidmovieviewer.application.MovieViewApplication;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -15,17 +16,22 @@ public class ResourcePropertyReader {
 
     private static Properties apiProperties;
 
-    public static String getApiKey(Context baseContext) {
-        return getApiProperties(baseContext).getProperty(API_KEY_PARAM);
+    public static String getApiKey() {
+        return getApiProperties().getProperty(API_KEY_PARAM);
     }
 
-    public static String getBaseApiUrl(Context baseContext) {
-        return getApiProperties(baseContext).getProperty(BASE_URL_PARAM);
+    public static String getProperty(String param) {
+        return getApiProperties().getProperty(param);
     }
 
-    private static Properties getApiProperties(Context baseContext) {
+    public static String getBaseApiUrl() {
+        return getApiProperties().getProperty(BASE_URL_PARAM);
+    }
+
+    private static Properties getApiProperties() {
         if (apiProperties == null) {
             try {
+                Context baseContext = MovieViewApplication.getContext();
                 apiProperties = new Properties();
                 apiProperties.load(baseContext.getAssets().open(API_PROPERTIES_FILE_NAME));
             } catch (IOException e) {

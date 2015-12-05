@@ -1,6 +1,5 @@
 package org.dollarhide.androidmovieviewer.service;
 
-import android.content.Context;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.dollarhide.androidmovieviewer.util.LoggingUtil;
@@ -16,8 +15,8 @@ public class ImageService extends MovieService {
     private static final String TAG = "ImageService";
     private static final String IMAGES_SERVICE_URL = "images";
 
-    public String getBitmapUrl(Context baseContext, String movieId) throws IOException, JSONException {
-        String imageGetUrl = getBaseUrl(baseContext) + MOVIE_SERVICE_URL + "/" + movieId + "/" + IMAGES_SERVICE_URL + "?" + getApiKeyRequestParam(baseContext) + "&language=en";
+    public String getBitmapUrl(String movieId) throws IOException, JSONException {
+        String imageGetUrl = getBaseUrl() + MOVIE_SERVICE_URL + "/" + movieId + "/" + IMAGES_SERVICE_URL + "?" + getApiKeyRequestParam() + "&language=en";
 
         LoggingUtil.logDebug(TAG, "Sending: " + imageGetUrl);
 

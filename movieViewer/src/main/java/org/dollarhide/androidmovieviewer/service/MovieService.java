@@ -1,7 +1,6 @@
 package org.dollarhide.androidmovieviewer.service;
 
 import android.app.Activity;
-import android.content.Context;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -13,8 +12,7 @@ public class MovieService extends BaseService {
     protected static String MOVIE_SERVICE_URL = "movie";
 
     public void getBasicInfo(Activity activity, int query, Response.Listener<JSONObject> basicInfoListener, Response.ErrorListener basicErrorListener) {
-        Context baseContext = activity.getBaseContext();
-        String url = getBaseUrl(baseContext) + MOVIE_SERVICE_URL + "/" + query + "?" + getApiKeyRequestParam(baseContext);
+        String url = getBaseUrl() + MOVIE_SERVICE_URL + "/" + query + "?" + getApiKeyRequestParam();
 
         LoggingUtil.logDebug(TAG, "Sending: " + url);
 
