@@ -1,6 +1,5 @@
 package org.dollarhide.androidmovieviewer.util;
 
-import android.util.Log;
 import org.apache.http.HttpResponse;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,13 +18,13 @@ public class ResponseParserUtil {
             return null;
         }
 
-        Log.d(TAG, "Response data: " + response.toString());
+        LoggingUtil.logDebug(TAG, "Response data: " + response.toString());
         BufferedReader in = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "UTF-8"));
         StringBuilder sb = new StringBuilder();
 
         String readLine;
         while((readLine = in.readLine()) != null) {
-            Log.d(TAG, "Line read: " + readLine);
+            LoggingUtil.logDebug(TAG, "Line read: " + readLine);
             sb.append(readLine).append("\n");
         }
 

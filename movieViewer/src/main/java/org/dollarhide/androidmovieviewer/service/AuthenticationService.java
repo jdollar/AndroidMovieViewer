@@ -15,14 +15,13 @@ import java.text.MessageFormat;
 public class AuthenticationService extends BaseService {
     private static final String TAG = "AuthenticationService";
 
-    private static final String AUTHENTICATION_NEW_PARAM = "authentication_new_service_url";
-    private static final String AUTHENTICATION_VALIDATE_LOGIN_PARAM = "authentication_validate_with_login_url";
-    private static final String AUTHENTICATION_SESSION_NEW_PARAM = "authentication_session_new_url";
+    public static final String AUTHENTICATION_NEW_PARAM = "authentication_new_service_url";
+    public static final String AUTHENTICATION_VALIDATE_LOGIN_PARAM = "authentication_validate_with_login_url";
+    public static final String AUTHENTICATION_SESSION_NEW_PARAM = "authentication_session_new_url";
 
-
-    private static final String REQUEST_TOKEN = "request_token";
-    private static final String SESSION_TOKEN = "session_id";
-    private static final String SUCCESS_PARAM = "success";
+    public static final String REQUEST_TOKEN = "request_token";
+    public static final String SESSION_TOKEN = "session_id";
+    public static final String SUCCESS_PARAM = "success";
 
     public RestResult getNewAuthenticationToken() throws IOException, JSONException {
         return callService(AUTHENTICATION_NEW_PARAM, REQUEST_TOKEN, ResourcePropertyReader.getApiKey());
