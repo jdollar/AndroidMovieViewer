@@ -26,8 +26,7 @@ public class AuthenticationServiceTest extends BaseServiceTestCase{
         RestResult expectedRestResult = new RestResult(true, expectedData);
         JSONObject expectedJSONObject = setupJSONData(true, REQUEST_TOKEN, expectedData);
 
-        RestResult result = newAuthenticationTokenTest_common(200, expectedJSONObject);
-        assertRestResult(expectedRestResult, result);
+        newAuthenticationTokenTest_common(200, expectedJSONObject, expectedRestResult);
     }
 
     @Test
@@ -36,15 +35,7 @@ public class AuthenticationServiceTest extends BaseServiceTestCase{
         RestResult expectedRestResult = new RestResult(true, expectedData);
         JSONObject expectedJSONObject = setupJSONData(true, REQUEST_TOKEN, expectedData);
 
-        RestResult result = newAuthenticationTokenTest_common(200, expectedJSONObject);
-        assertRestResult(expectedRestResult, result);
-    }
-
-    @Test
-    public void testNewAuthenticiationToken_badRequestCode() {
-        RestResult expectedRestResult = new RestResult(false, null);
-        RestResult result = newAuthenticationTokenTest_common(403, null);
-        assertRestResult(expectedRestResult, result);
+        newAuthenticationTokenTest_common(200, expectedJSONObject, expectedRestResult);
     }
 
     @Test
@@ -53,8 +44,7 @@ public class AuthenticationServiceTest extends BaseServiceTestCase{
         RestResult expectedRestResult = new RestResult(false, expectedData);
         JSONObject expectedJSONObject = setupJSONData(false, REQUEST_TOKEN, expectedData);
 
-        RestResult result = newAuthenticationTokenTest_common(200, expectedJSONObject);
-        assertRestResult(expectedRestResult, result);
+        newAuthenticationTokenTest_common(200, expectedJSONObject, expectedRestResult);
     }
 
     @Test
@@ -63,13 +53,62 @@ public class AuthenticationServiceTest extends BaseServiceTestCase{
         RestResult expectedRestResult = new RestResult(false, expectedData);
         JSONObject expectedJSONObject = setupJSONData(false, REQUEST_TOKEN, expectedData);
 
-        RestResult result = newAuthenticationTokenTest_common(200, expectedJSONObject);
-        assertRestResult(expectedRestResult, result);
+        newAuthenticationTokenTest_common(200, expectedJSONObject, expectedRestResult);
     }
 
-    private RestResult newAuthenticationTokenTest_common(int statusCode, JSONObject expectedJSONObject) {
+    @Test
+    public void testNewAuthenticiationToken_badRequestCode() {
+        RestResult expectedRestResult = new RestResult(false, null);
+        newAuthenticationTokenTest_common(403, null, expectedRestResult);
+    }
+
+    private void newAuthenticationTokenTest_common(int statusCode, JSONObject expectedJSONObject, RestResult expectedRestResult) {
         try {
-            Properties testApiProperties = setupPropertiesData(AUTHENTICATION_NEW_PARAM, "testUrl{0}");
+            String testUrl = "testUrl{0}";
+            commonMockSetup(statusCode, AUTHENTICATION_NEW_PARAM, testUrl, expectedJSONObject);
+            assertRestResult(expectedRestResult, getService().getNewAuthenticationToken());
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("Exception has occurred when it should not.");
+        }
+    }
+
+    @Test
+    public void testLogin_successWithData() {
+        String expectedData = "true";
+        RestResult expectedRestResult = new RestResult(Boolean.TRUE, expectedData);
+        JSONObject expectedJSONObject = setupJSONData(true, SUCCESS_PARAM, expectedData);
+        testLogin_common(200, expectedJSONObject, expectedRestResult);
+    }
+
+    @Test
+    public void testLogin_failureWithData() {
+        String expectedData = "false";
+        RestResult expectedRestResult = new RestResult(Boolean.FALSE, expectedData);
+        JSONObject expectedJSONObject = setupJSONData(false, SUCCESS_PARAM, expectedData);
+        testLogin_common(200, expectedJSONObject, expectedRestResult);
+    }
+
+    @Test
+    public void testLogin_badRequestCode() {
+        RestResult expectedRestResult = new RestResult(Boolean.FALSE, null);
+        testLogin_common(403, null, expectedRestResult);
+    }
+
+    private void testLogin_common(int statusCode, JSONObject expectedJSONObject, RestResult expectedResult) {
+        try {
+            String testUrl = "test{0}{1}{2}{3}";
+            commonMockSetup(statusCode, AUTHENTICATION_VALIDATE_LOGIN_PARAM, testUrl, expectedJSONObject);
+            assertRestResult(expectedResult, getService().login("username", "password", "requestToken"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("Exception has occurred when it should not.");
+        }
+    }
+
+    private void commonMockSetup(int statusCode, String serviceProp, String serviceUrl, JSONObject expectedJSONObject) {
+        try {
+            Properties testApiProperties = setupPropertiesData(serviceProp, serviceUrl);
             ResourcePropertyReader.setApiProperties(testApiProperties);
 
             when(mockHttpClient.execute(any(HttpGet.class))).thenReturn(mockHttpResponse);
@@ -78,14 +117,10 @@ public class AuthenticationServiceTest extends BaseServiceTestCase{
                 when(mockHttpEntity.getContent())
                         .thenReturn(new ByteArrayInputStream(expectedJSONObject.toString().getBytes(UTF_8)));
             }
-
-            return getService().getNewAuthenticationToken();
         } catch (Exception e) {
             e.printStackTrace();
             fail("Exception has occurred when it should not.");
         }
-
-        return null;
     }
 
     @Override
