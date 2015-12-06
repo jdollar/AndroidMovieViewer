@@ -2,47 +2,48 @@ package org.dollarhide.androidmovieviewer.service;
 
 import org.apache.http.client.methods.HttpGet;
 import org.dollarhide.androidmovieviewer.model.RestResult;
+import org.dollarhide.androidmovieviewer.util.LoggingUtil;
 import org.dollarhide.androidmovieviewer.util.ResourcePropertyReader;
-import org.dollarhide.androidmovieviewer.util.ResponseParserUtil;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.io.IOException;
+import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Properties;
 
+import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
-@RunWith(PowerMockRunner.class)
 public class AuthenticationServiceTest extends BaseServiceTestCase{
 
     private static final String TAG = "AuthenticationServiceTest";
 
-    @PrepareForTest({ResourcePropertyReader.class, ResponseParserUtil.class})
     @Test
-    public void testNewAuthenticationToken_successWithData() throws JSONException, IOException {
+    public void testNewAuthenticationToken_successWithData() {
         String expectedData = "requestTokenTest";
         JSONObject expectedJSONObject = new JSONObject();
-        expectedJSONObject.put(AuthenticationService.SUCCESS_PARAM, true);
-        expectedJSONObject.put(AuthenticationService.REQUEST_TOKEN, expectedData);
 
-        PowerMockito.mockStatic(ResponseParserUtil.class);
-        PowerMockito.mockStatic(ResourcePropertyReader.class);
+        try {
+            expectedJSONObject.put(AuthenticationService.SUCCESS_PARAM, true);
+            expectedJSONObject.put(AuthenticationService.REQUEST_TOKEN, expectedData);
 
-        when(mockHttpClient.execute(any(HttpGet.class))).thenReturn(mockHttpResponse);
-        when(mockStatusLine.getStatusCode()).thenReturn(200);
-        PowerMockito.when(ResponseParserUtil.readHttpResponseToJson(mockHttpResponse))
-                .thenReturn(expectedJSONObject);
-        PowerMockito.when(ResourcePropertyReader.getProperty(AuthenticationService.AUTHENTICATION_NEW_PARAM))
-                .thenReturn("testUrl{0}");
+            Properties testApiProperties = new Properties();
+            testApiProperties.put(AuthenticationService.AUTHENTICATION_NEW_PARAM, "testUrl{0}");
+            testApiProperties.put(LoggingUtil.DEBUG_ENABLED_PARAM, "false");
+            ResourcePropertyReader.setApiProperties(testApiProperties);
+            when(mockHttpClient.execute(any(HttpGet.class))).thenReturn(mockHttpResponse);
+            when(mockStatusLine.getStatusCode()).thenReturn(200);
+            when(mockHttpEntity.getContent())
+                    .thenReturn(new ByteArrayInputStream(expectedJSONObject.toString().getBytes(StandardCharsets.UTF_8)));
 
-        RestResult result = getService().getNewAuthenticationToken();
-        assert result.getSuccessFlag();
-        assert expectedData.equals(result.getData());
+            RestResult result = getService().getNewAuthenticationToken();
+            assert result.getSuccessFlag();
+            assert expectedData.equals(result.getData());
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("Exception has occurred when it should not.");
+        }
     }
 
     @Test

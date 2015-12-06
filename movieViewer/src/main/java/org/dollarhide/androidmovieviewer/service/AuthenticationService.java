@@ -41,6 +41,7 @@ public class AuthenticationService extends BaseService {
         String urlProperty = ResourcePropertyReader.getProperty(serviceUrl);
         String url = getBaseUrl() + MessageFormat.format(urlProperty, params);
 
+
         LoggingUtil.logDebug(TAG, "Sending url: " + url);
 
         HttpGet httpGet = new HttpGet(url);

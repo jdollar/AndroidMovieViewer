@@ -42,5 +42,9 @@ public class ResourcePropertyReader {
         return apiProperties;
     }
 
+    //used for testing
+    public static void setApiProperties(Properties apiProperties) {
+        ResourcePropertyReader.apiProperties = apiProperties;
+    }
 
 }
