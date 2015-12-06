@@ -123,6 +123,59 @@ public class AuthenticationServiceTest extends BaseServiceTestCase{
         }
     }
 
+    @Test
+    public void testGetSessionId_successWithData() throws IOException {
+        String expectedData = "sessionIdTest";
+        RestResult expectedRestResult = new RestResult(true, expectedData);
+        JSONObject expectedJSONObject = setupJSONData(true, SESSION_TOKEN, expectedData);
+
+        testGetSessionId_common(200, expectedJSONObject, expectedRestResult);
+    }
+
+    @Test
+    public void testGetSessionId_successWithBlankData() throws IOException {
+        String expectedData = "";
+        RestResult expectedRestResult = new RestResult(true, expectedData);
+        JSONObject expectedJSONObject = setupJSONData(true, SESSION_TOKEN, expectedData);
+
+        testGetSessionId_common(200, expectedJSONObject, expectedRestResult);
+    }
+
+    @Test
+    public void testGetSessionId_failureWithData() throws IOException {
+        String expectedData = "sessionIdTest";
+        RestResult expectedRestResult = new RestResult(false, expectedData);
+        JSONObject expectedJSONObject = setupJSONData(false, SESSION_TOKEN, expectedData);
+
+        testGetSessionId_common(200, expectedJSONObject, expectedRestResult);
+    }
+
+    @Test
+    public void testGetSessionId_failureBlankData() throws IOException {
+        String expectedData = "";
+        RestResult expectedRestResult = new RestResult(false, expectedData);
+        JSONObject expectedJSONObject = setupJSONData(false, SESSION_TOKEN, expectedData);
+
+        testGetSessionId_common(200, expectedJSONObject, expectedRestResult);
+    }
+
+    @Test
+    public void testGetSessionId_badRequestCode() {
+        RestResult expectedRestResult = new RestResult(false, null);
+        testGetSessionId_common(403, null, expectedRestResult);
+    }
+
+    private void testGetSessionId_common(int statusCode, JSONObject expectedJSONObject, RestResult expectedRestResult) {
+        try {
+            String testUrl = "testUrl{0}{1}";
+            commonMockSetup(statusCode, AUTHENTICATION_SESSION_NEW_PARAM, testUrl, expectedJSONObject);
+            assertRestResult(expectedRestResult, getService().getSessionId("requestTokenTest"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("Exception has occurred when it should not.");
+        }
+    }
+
     @Override
     protected BaseService createService() {
         return new AuthenticationService();
