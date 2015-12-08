@@ -43,7 +43,13 @@ public class LoginActivity extends BaseMovieViewerActivity {
         String username = usernameInput.getText().toString();
         String password = passwordInput.getText().toString();
 
-        LoginTask loginTask = new LoginTask() {
+        LoginTask loginTask = createNewLoginTask();
+
+        loginTask.execute(username, password);
+    }
+
+    protected LoginTask createNewLoginTask() {
+        return new LoginTask() {
             @Override
             protected void onPreExecute() {
                 //TODO: do some progress bar display. Login action takes 3 rest calls.
@@ -69,8 +75,6 @@ public class LoginActivity extends BaseMovieViewerActivity {
                 }
             }
         };
-
-        loginTask.execute(username, password);
     }
 
     private void updateSharedPreference(String sessionId) {
