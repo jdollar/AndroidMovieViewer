@@ -32,7 +32,6 @@ public class HomeActivityTest extends ActivityInstrumentationTestCase2<Home> {
 
     @MediumTest
     public void testHomeActivity_checkViewGenerations() {
-        homeActivityTest = getActivity();
         final View decorView = homeActivityTest.getWindow().getDecorView();
         ViewAsserts.assertOnScreen(decorView, searchButton);
         ViewAsserts.assertOnScreen(decorView, settingsButton);
