@@ -4,6 +4,8 @@ Practice Android Application to attach to themoviedb restful service and display
 #### Completed Tasks
 * Movie Title search
 * Basic movie information display
+* Basic Login Functionality
+* Setup Junit test suite (Integration and Unit)
 
 #### Roadmap
 * Login functionalities
@@ -11,4 +13,6 @@ Practice Android Application to attach to themoviedb restful service and display
 * TV title search
 * TheMovieDB Account settings
 * Advanced movie/TV search
-* Setup Junit Test suite
+* Add additional junit tests
+* Add additional integration tests
+* Move to MVP layout
