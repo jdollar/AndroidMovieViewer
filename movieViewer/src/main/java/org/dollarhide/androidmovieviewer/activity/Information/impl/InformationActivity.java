@@ -1,4 +1,4 @@
-package org.dollarhide.androidmovieviewer.activity;
+package org.dollarhide.androidmovieviewer.activity.Information.impl;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -9,6 +9,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import org.dollarhide.androidmovieviewer.activity.BaseMovieViewerActivity;
 import org.dollarhide.androidmovieviewer.movieviewer.R;
 import org.dollarhide.androidmovieviewer.service.MovieService;
 import org.dollarhide.androidmovieviewer.task.CoverArtImageTask;

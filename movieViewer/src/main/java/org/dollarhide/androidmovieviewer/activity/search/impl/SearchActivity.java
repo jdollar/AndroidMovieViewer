@@ -1,4 +1,4 @@
-package org.dollarhide.androidmovieviewer.activity;
+package org.dollarhide.androidmovieviewer.activity.search.impl;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import org.dollarhide.androidmovieviewer.activity.BaseMovieViewerActivity;
+import org.dollarhide.androidmovieviewer.activity.Information.impl.InformationActivity;
 import org.dollarhide.androidmovieviewer.model.SearchCriteria;
 import org.dollarhide.androidmovieviewer.model.SearchResults;
 import org.dollarhide.androidmovieviewer.movieviewer.R;

@@ -1,4 +1,4 @@
-package org.dollarhide.androidmovieviewer.activity;
+package org.dollarhide.androidmovieviewer.activity.login.impl;
 
 import android.test.UiThreadTest;
 import android.test.ViewAsserts;
@@ -7,14 +7,12 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TableRow;
 import android.widget.TextView;
+import org.dollarhide.androidmovieviewer.activity.BaseActivityTestCase;
 import org.dollarhide.androidmovieviewer.activity.login.LoginPresenter;
-import org.dollarhide.androidmovieviewer.activity.login.impl.LoginActivity;
 import org.dollarhide.androidmovieviewer.movieviewer.R;
 import org.mockito.Mockito;
 
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.*;
 
 public class LoginActivityTest extends BaseActivityTestCase<LoginActivity> {
 
