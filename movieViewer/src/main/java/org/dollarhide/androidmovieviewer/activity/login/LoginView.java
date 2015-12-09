@@ -1,7 +1,8 @@
 package org.dollarhide.androidmovieviewer.activity.login;
 
 public interface LoginView {
-    public void clearBanners();
-    public void updateSuccessBanner(String statusText, int visibility);
-    public void updateErrorBanner(String statusText, int visibility);
+    void clearBanners();
+    void updateSuccessBanner(String statusText, int visibility);
+    void updateErrorBanner(String statusText, int visibility);
+    void setLoginPresenter(LoginPresenter loginPresenter);
 }

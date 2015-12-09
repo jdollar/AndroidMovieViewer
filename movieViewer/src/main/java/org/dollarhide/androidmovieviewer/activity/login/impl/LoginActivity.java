@@ -75,4 +75,9 @@ public class LoginActivity extends BaseMovieViewerActivity implements LoginView 
         textView.setText(statusText);
         tableRow.setVisibility(visibility);
     }
+
+    //used for testing
+    public void setLoginPresenter(LoginPresenter loginPresenter) {
+        this.loginPresenter = loginPresenter;
+    }
 }
