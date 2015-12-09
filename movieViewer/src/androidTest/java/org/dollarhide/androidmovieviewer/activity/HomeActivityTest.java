@@ -1,7 +1,6 @@
 package org.dollarhide.androidmovieviewer.activity;
 
 import android.app.Instrumentation;
-import android.test.ActivityInstrumentationTestCase2;
 import android.test.TouchUtils;
 import android.test.ViewAsserts;
 import android.test.suitebuilder.annotation.MediumTest;
@@ -10,7 +9,7 @@ import android.widget.Button;
 import org.dollarhide.androidmovieviewer.activity.login.impl.LoginActivity;
 import org.dollarhide.androidmovieviewer.movieviewer.R;
 
-public class HomeActivityTest extends ActivityInstrumentationTestCase2<Home> {
+public class HomeActivityTest extends BaseActivityTestCase<Home> {
 
     private Home homeActivityTest;
     private Button searchButton;
@@ -24,8 +23,7 @@ public class HomeActivityTest extends ActivityInstrumentationTestCase2<Home> {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        setActivityInitialTouchMode(true);
-        homeActivityTest = getActivity();
+        homeActivityTest = getMovieViewerActivity();
         searchButton = (Button) homeActivityTest.findViewById(R.id.search_button);
         loginButton = (Button) homeActivityTest.findViewById(R.id.login_button_home);
         settingsButton = (Button) homeActivityTest.findViewById(R.id.settings_button);
@@ -57,5 +55,10 @@ public class HomeActivityTest extends ActivityInstrumentationTestCase2<Home> {
         LoginActivity loginActivity = (LoginActivity) getInstrumentation().waitForMonitorWithTimeout(monitor, 3);
         assertNotNull(loginActivity);
         loginActivity.finish();
+    }
+
+    @Override
+    protected Home getMovieViewerActivity() {
+        return (Home) super.getMovieViewerActivity();
     }
 }

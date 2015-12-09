@@ -7,6 +7,10 @@ import org.dollarhide.androidmovieviewer.activity.login.LoginPresenter;
 import org.dollarhide.androidmovieviewer.activity.login.LoginView;
 
 public class LoginPresenterImpl implements LoginPresenter, LoginCallbackListener {
+
+    public static final String SUCCESS_LOGIN_MESSAGE = "Logged in successsfully!";
+    public static final String FAILURE_LOGIN_MESSAGE = "Error logging in";
+
     private LoginView loginView;
     private LoginInteractor loginInteractor;
 
@@ -43,12 +47,17 @@ public class LoginPresenterImpl implements LoginPresenter, LoginCallbackListener
     @Override
     public void onPostLoginSuccess() {
         loginView.clearBanners();
-        loginView.updateSuccessBanner("Logged in successsfully!", View.VISIBLE);
+        loginView.updateSuccessBanner(SUCCESS_LOGIN_MESSAGE, View.VISIBLE);
     }
 
     @Override
     public void onPostLoginError() {
         loginView.clearBanners();
-        loginView.updateErrorBanner("Error logging in", View.VISIBLE);
+        loginView.updateErrorBanner(FAILURE_LOGIN_MESSAGE, View.VISIBLE);
+    }
+
+    //used for testing
+    public void setLoginInteractor(LoginInteractor loginInteractor) {
+        this.loginInteractor = loginInteractor;
     }
 }

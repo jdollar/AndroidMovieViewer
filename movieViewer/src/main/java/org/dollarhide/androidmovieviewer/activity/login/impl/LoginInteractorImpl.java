@@ -11,6 +11,8 @@ import org.dollarhide.androidmovieviewer.util.LoggingUtil;
 public class LoginInteractorImpl implements LoginInteractor {
     private static String TAG = "LoginInteractorImpl";
 
+    public static final String SESSION_ID_PREF_PARAM = "session_id";
+
     @Override
     public void login(String username, String password, final LoginCallbackListener listener) {
         LoginTask loginTask = createNewLoginTask(listener);
@@ -51,7 +53,7 @@ public class LoginInteractorImpl implements LoginInteractor {
     private void updateSharedPreference(String sessionId) {
         SharedPreferences sharedPreferences = MovieViewApplication.getMovieViewerSharedPreferences();
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("session_id", sessionId);
+        editor.putString(SESSION_ID_PREF_PARAM, sessionId);
         editor.commit();
     }
 }
