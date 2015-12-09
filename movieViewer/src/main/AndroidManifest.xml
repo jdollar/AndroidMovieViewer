@@ -33,7 +33,7 @@
         </activity>
 
         <activity
-                android:name="org.dollarhide.androidmovieviewer.activity.LoginActivity"
+                android:name="org.dollarhide.androidmovieviewer.activity.login.impl.LoginActivity"
                 android:label="@string/app_name"
                 android:parentActivityName="org.dollarhide.androidmovieviewer.activity.Home">
         </activity>

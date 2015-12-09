@@ -7,11 +7,13 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TableRow;
 import android.widget.TextView;
+import org.dollarhide.androidmovieviewer.activity.login.impl.LoginActivity;
 import org.dollarhide.androidmovieviewer.movieviewer.R;
 
 public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginActivity> {
 
     private LoginActivity loginActivity;
+
     private TableRow successRow;
     private TextView successTextView;
     private TableRow errorRow;
@@ -36,6 +38,7 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
         errorTextView = (TextView) loginActivity.findViewById(R.id.errorTextView);
         usernameInput = (EditText) loginActivity.findViewById(R.id.usernameInput);
         passwordInput = (EditText) loginActivity.findViewById(R.id.passwordInput);
+
     }
 
     @MediumTest

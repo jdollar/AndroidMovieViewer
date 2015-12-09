@@ -11,6 +11,10 @@ public class LoginTask extends BaseTask {
 
     private AuthenticationService authenticationService = new AuthenticationService();
 
+    public LoginTask() {
+        super();
+    }
+
     @Override
     protected RestResult doInBackground(Object[] params) {
         //default rest result with false for success flag to tell UI there has been an error

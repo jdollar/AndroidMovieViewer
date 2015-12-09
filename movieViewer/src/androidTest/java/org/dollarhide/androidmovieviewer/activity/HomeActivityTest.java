@@ -7,6 +7,7 @@ import android.test.ViewAsserts;
 import android.test.suitebuilder.annotation.MediumTest;
 import android.view.View;
 import android.widget.Button;
+import org.dollarhide.androidmovieviewer.activity.login.impl.LoginActivity;
 import org.dollarhide.androidmovieviewer.movieviewer.R;
 
 public class HomeActivityTest extends ActivityInstrumentationTestCase2<Home> {
