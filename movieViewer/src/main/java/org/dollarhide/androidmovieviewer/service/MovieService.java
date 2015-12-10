@@ -5,14 +5,18 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import org.dollarhide.androidmovieviewer.util.LoggingUtil;
+import org.dollarhide.androidmovieviewer.util.ResourcePropertyReader;
 import org.json.JSONObject;
+
+import java.text.MessageFormat;
 
 public class MovieService extends BaseService {
     private static final String TAG = "MovieService";
-    protected static String MOVIE_SERVICE_URL = "movie";
+    protected static String BASIC_INFO_MOVIE_SERVICE_URL = "basic_info_movie_service_url";
 
     public void getBasicInfo(Activity activity, int query, Response.Listener<JSONObject> basicInfoListener, Response.ErrorListener basicErrorListener) {
-        String url = getBaseUrl() + MOVIE_SERVICE_URL + "/" + query + "?" + getApiKeyRequestParam();
+        String basicInfoServiceUrl = ResourcePropertyReader.getServiceUrl(BASIC_INFO_MOVIE_SERVICE_URL);
+        String url = MessageFormat.format(basicInfoServiceUrl, query, ResourcePropertyReader.getApiKey());
 
         LoggingUtil.logDebug(TAG, "Sending: " + url);
 

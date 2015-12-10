@@ -10,6 +10,11 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.Map;
+import java.util.Properties;
+
+import static org.dollarhide.androidmovieviewer.util.LoggingUtil.DEBUG_ENABLED_PARAM;
+
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -57,6 +62,17 @@ public abstract class BaseServiceTestCase {
 
         assertNotNull(actualResult.getData());
         assertEquals(expectedResult.getData(), actualResult.getData());
+    }
+
+    protected Properties setupPropertiesData(Map<String, String> propertyMap) {
+        Properties properties = new Properties();
+        properties.setProperty(DEBUG_ENABLED_PARAM, "false");
+        for (Map.Entry<String, String> propertyEntry : propertyMap.entrySet()) {
+            if (propertyEntry != null) {
+                properties.setProperty(propertyEntry.getKey(), propertyEntry.getValue());
+            }
+        }
+        return properties;
     }
 
     protected abstract BaseService createService();

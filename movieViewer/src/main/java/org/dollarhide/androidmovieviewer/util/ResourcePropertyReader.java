@@ -10,9 +10,9 @@ public class ResourcePropertyReader {
 
     private static final String TAG = "ResourcePropertyReader";
 
-    private static final String API_PROPERTIES_FILE_NAME = "api.properties";
-    private static final String API_KEY_PARAM = "api_key";
-    private static final String BASE_URL_PARAM = "base_url";
+    public static final String API_PROPERTIES_FILE_NAME = "api.properties";
+    public static final String API_KEY_PARAM = "api_key";
+    public static final String BASE_URL_PARAM = "base_url";
 
     private static Properties apiProperties;
 
@@ -26,6 +26,10 @@ public class ResourcePropertyReader {
 
     public static String getBaseApiUrl() {
         return getApiProperties().getProperty(BASE_URL_PARAM);
+    }
+
+    public static String getServiceUrl(String serviceParam) {
+        return getBaseApiUrl() + getProperty(serviceParam);
     }
 
     private static Properties getApiProperties() {

@@ -8,12 +8,13 @@ import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.dollarhide.androidmovieviewer.service.AuthenticationService.*;
-import static org.dollarhide.androidmovieviewer.util.LoggingUtil.DEBUG_ENABLED_PARAM;
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
@@ -106,9 +107,9 @@ public class AuthenticationServiceTest extends BaseServiceTestCase{
         }
     }
 
-    private void commonMockSetup(int statusCode, String serviceProp, String serviceUrl, JSONObject expectedJSONObject) {
+    private void commonMockSetup(int statusCode, final String serviceProp, final String serviceUrl, JSONObject expectedJSONObject) {
         try {
-            Properties testApiProperties = setupPropertiesData(serviceProp, serviceUrl);
+            Properties testApiProperties = setupPropertiesData(createPropertyMap(serviceProp, serviceUrl));
             ResourcePropertyReader.setApiProperties(testApiProperties);
 
             when(mockHttpClient.execute(any(HttpGet.class))).thenReturn(mockHttpResponse);
@@ -201,10 +202,9 @@ public class AuthenticationServiceTest extends BaseServiceTestCase{
         return jsonObject;
     }
 
-    private Properties setupPropertiesData(String serviceUrlParam, String serviceUrl) {
-        Properties testApiProperties = new Properties();
-        testApiProperties.put(serviceUrlParam, serviceUrl);
-        testApiProperties.put(DEBUG_ENABLED_PARAM, "false");
-        return testApiProperties;
+    private Map<String, String> createPropertyMap(String serviceProp, String serviceUrl) {
+        Map<String, String> propertyMap = new HashMap<String, String>();
+        propertyMap.put(serviceProp, serviceUrl);
+        return propertyMap;
     }
 }

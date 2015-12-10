@@ -6,15 +6,17 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import org.dollarhide.androidmovieviewer.model.SearchCriteria;
 import org.dollarhide.androidmovieviewer.util.LoggingUtil;
+import org.dollarhide.androidmovieviewer.util.ResourcePropertyReader;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.MessageFormat;
 
 public class SearchService extends BaseService {
 
     private static String TAG = "SearchService";
-    private static String MOVIE_SEARCH_URL = "search/movie";
+    private static String MOVIE_SEARCH_URL = "movie_search_service_url";
 
     public void movieSearch(Activity activity,
                             SearchCriteria searchCriteria,
@@ -27,7 +29,8 @@ public class SearchService extends BaseService {
     }
 
     private String createMovieSearchUrl(String query) throws UnsupportedEncodingException {
-        return getBaseUrl() + MOVIE_SEARCH_URL + "?" + getApiKeyRequestParam() + query;
+        String movieSearchUrl = ResourcePropertyReader.getServiceUrl(MOVIE_SEARCH_URL);
+        return MessageFormat.format(movieSearchUrl, ResourcePropertyReader.getApiKey(), query);
     }
 
     private String getUrlEncodedQuery(SearchCriteria criteria) throws UnsupportedEncodingException {

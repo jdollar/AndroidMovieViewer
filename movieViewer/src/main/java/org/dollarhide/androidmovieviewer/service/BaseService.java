@@ -19,10 +19,6 @@ public abstract class BaseService {
         return requestQueue;
     }
 
-    protected String getApiKeyRequestParam() {
-        return "api_key=" + ResourcePropertyReader.getApiKey();
-    }
-
     protected String getBaseUrl() {
         return ResourcePropertyReader.getBaseApiUrl();
     }
