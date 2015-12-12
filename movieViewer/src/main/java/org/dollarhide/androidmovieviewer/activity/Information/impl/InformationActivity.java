@@ -20,7 +20,7 @@ public class InformationActivity extends BaseMovieViewerActivity {
     private static String TAG = "InformationActivity";
     private static final String CONFIG_SERVICE_URL = "configuration";
 
-    private Integer movieId;
+    private String movieId;
 
     private ProgressBar progressBar;
     private TextView titleTextView;
@@ -41,7 +41,7 @@ public class InformationActivity extends BaseMovieViewerActivity {
         movieService = new MovieService();
 
         Bundle passedInformation = getIntent().getExtras();
-        movieId = (Integer) passedInformation.get("selectedEntertainmentId");
+        movieId = passedInformation.getString("selectedEntertainmentId");
 
         if (movieId == null) {
             LoggingUtil.logDebug(TAG, "Movie ID is invalid");

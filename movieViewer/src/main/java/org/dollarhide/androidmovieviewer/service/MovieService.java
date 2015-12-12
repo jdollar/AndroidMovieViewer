@@ -14,7 +14,7 @@ public class MovieService extends BaseService {
     private static final String TAG = "MovieService";
     protected static String BASIC_INFO_MOVIE_SERVICE_URL = "basic_info_movie_service_url";
 
-    public void getBasicInfo(Activity activity, int query, Response.Listener<JSONObject> basicInfoListener, Response.ErrorListener basicErrorListener) {
+    public void getBasicInfo(Activity activity, String query, Response.Listener<JSONObject> basicInfoListener, Response.ErrorListener basicErrorListener) {
         String basicInfoServiceUrl = ResourcePropertyReader.getServiceUrl(BASIC_INFO_MOVIE_SERVICE_URL);
         String url = MessageFormat.format(basicInfoServiceUrl, query, ResourcePropertyReader.getApiKey());
 

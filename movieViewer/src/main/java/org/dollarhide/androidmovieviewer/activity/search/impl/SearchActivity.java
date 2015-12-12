@@ -18,6 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Collections;
 
 public class SearchActivity extends BaseMovieViewerActivity {
 
@@ -49,22 +50,12 @@ public class SearchActivity extends BaseMovieViewerActivity {
         searchService = new SearchService();
 
         titleInput = (EditText) findViewById(R.id.searchTitleText);
-        //resultRadioGroup = (RadioGroup) findViewById(R.id.result_radio_group);
         resultsListView = (ListView) findViewById(R.id.resultsView);
         selectButton = (Button) findViewById(R.id.select_button);
         prevPageButton = (Button) findViewById(R.id.prev_page_button);
         nextPageButton = (Button) findViewById(R.id.next_page_button);
 
-        /*resultRadioGroup.setOnCheckedChangeListener(
-                new RadioGroup.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(RadioGroup group, int checkedId) {
-                        if (View.INVISIBLE == selectButton.getVisibility()) {
-                            selectButton.setVisibility(View.VISIBLE);
-                        }
-                    }
-                }
-        );*/
+        resultsListView.setOnItemClickListener(createItemClickListener());
     }
 
     public void searchForMovie(View view) {
@@ -86,23 +77,23 @@ public class SearchActivity extends BaseMovieViewerActivity {
         callMovieSearch();
     }
 
-    public void viewSelectionInformation(View view) {
+    public void viewSelectionInformation(int position) {
         Intent informationIntent = new Intent(this, InformationActivity.class);
         Bundle selectedEntertainment = new Bundle();
 
-        //selectedEntertainment.putInt("selectedEntertainmentId", resultRadioGroup.getCheckedRadioButtonId());
+        selectedEntertainment.putString("selectedEntertainmentId", resultAdapter.getItemKey(position));
         informationIntent.putExtras(selectedEntertainment);
 
         startActivity(informationIntent);
     }
 
     public void clearInputFields(View view) {
-        hideSelectButton();
-        showHidePageButtons();
         titleInput.setText("");
         searchCriteria = null;
         searchResults = null;
-        //resultRadioGroup.removeAllViews();
+        resultsListView.setAdapter(new ResultAdapter(Collections.EMPTY_MAP));
+        hideSelectButton();
+        showHidePageButtons();
     }
 
     private void callMovieSearch() {
@@ -140,7 +131,7 @@ public class SearchActivity extends BaseMovieViewerActivity {
 
                     //clear out previous results and makes items not selectable
                     hideSelectButton();
-                    //resultRadioGroup.removeAllViews();
+                    resultsListView.setAdapter(new ResultAdapter(Collections.EMPTY_MAP));
 
                     LoggingUtil.logDebug(TAG, "Response: " + response.toString());
 
@@ -154,8 +145,6 @@ public class SearchActivity extends BaseMovieViewerActivity {
                         JSONObject result = resultList.getJSONObject(i);
 
                         searchResults.addResults(result.getString("id"), result.getString("title"));
-
-                        //resultRadioGroup.addView(createResultRadioButton(result.getInt("id"), result.getString("title")));
                     }
                     resultAdapter = new ResultAdapter(searchResults.getResults());
                     resultsListView.setAdapter(resultAdapter);
@@ -190,6 +179,15 @@ public class SearchActivity extends BaseMovieViewerActivity {
         } else {
             prevPageButton.setVisibility(View.VISIBLE);
         }
+    }
+
+    private AdapterView.OnItemClickListener createItemClickListener() {
+        return new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                viewSelectionInformation(position);
+            }
+        };
     }
 
     //Getters and Setters

@@ -42,6 +42,10 @@ public class ResultAdapter extends BaseAdapter {
         return position;
     }
 
+    public String getItemKey(int position) {
+        return keyList.get(position);
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
