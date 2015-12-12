@@ -29,4 +29,6 @@ public class SearchResults {
     public void addResults(String id, String name) {
         results.put(id, name);
     }
+
+    public Map<String, String> getResults() { return results; }
 }

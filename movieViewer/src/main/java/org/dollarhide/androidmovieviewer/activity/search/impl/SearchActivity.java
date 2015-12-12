@@ -3,14 +3,12 @@ package org.dollarhide.androidmovieviewer.activity.search.impl;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.widget.*;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import org.dollarhide.androidmovieviewer.activity.BaseMovieViewerActivity;
 import org.dollarhide.androidmovieviewer.activity.Information.impl.InformationActivity;
+import org.dollarhide.androidmovieviewer.adapter.ResultAdapter;
 import org.dollarhide.androidmovieviewer.model.SearchCriteria;
 import org.dollarhide.androidmovieviewer.model.SearchResults;
 import org.dollarhide.androidmovieviewer.movieviewer.R;
@@ -32,9 +30,12 @@ public class SearchActivity extends BaseMovieViewerActivity {
     private SearchCriteria searchCriteria;
     private SearchResults searchResults;
 
+    private ResultAdapter resultAdapter;
+
     //page inputs
     private EditText titleInput;
-    private RadioGroup resultRadioGroup;
+   // private RadioGroup resultRadioGroup;
+    private ListView resultsListView;
     private Button selectButton;
     private Button prevPageButton;
     private Button nextPageButton;
@@ -44,15 +45,17 @@ public class SearchActivity extends BaseMovieViewerActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
+
         searchService = new SearchService();
 
         titleInput = (EditText) findViewById(R.id.searchTitleText);
-        resultRadioGroup = (RadioGroup) findViewById(R.id.result_radio_group);
+        //resultRadioGroup = (RadioGroup) findViewById(R.id.result_radio_group);
+        resultsListView = (ListView) findViewById(R.id.resultsView);
         selectButton = (Button) findViewById(R.id.select_button);
         prevPageButton = (Button) findViewById(R.id.prev_page_button);
         nextPageButton = (Button) findViewById(R.id.next_page_button);
 
-        resultRadioGroup.setOnCheckedChangeListener(
+        /*resultRadioGroup.setOnCheckedChangeListener(
                 new RadioGroup.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -61,7 +64,7 @@ public class SearchActivity extends BaseMovieViewerActivity {
                         }
                     }
                 }
-        );
+        );*/
     }
 
     public void searchForMovie(View view) {
@@ -87,7 +90,7 @@ public class SearchActivity extends BaseMovieViewerActivity {
         Intent informationIntent = new Intent(this, InformationActivity.class);
         Bundle selectedEntertainment = new Bundle();
 
-        selectedEntertainment.putInt("selectedEntertainmentId", resultRadioGroup.getCheckedRadioButtonId());
+        //selectedEntertainment.putInt("selectedEntertainmentId", resultRadioGroup.getCheckedRadioButtonId());
         informationIntent.putExtras(selectedEntertainment);
 
         startActivity(informationIntent);
@@ -99,7 +102,7 @@ public class SearchActivity extends BaseMovieViewerActivity {
         titleInput.setText("");
         searchCriteria = null;
         searchResults = null;
-        resultRadioGroup.removeAllViews();
+        //resultRadioGroup.removeAllViews();
     }
 
     private void callMovieSearch() {
@@ -137,7 +140,7 @@ public class SearchActivity extends BaseMovieViewerActivity {
 
                     //clear out previous results and makes items not selectable
                     hideSelectButton();
-                    resultRadioGroup.removeAllViews();
+                    //resultRadioGroup.removeAllViews();
 
                     LoggingUtil.logDebug(TAG, "Response: " + response.toString());
 
@@ -151,8 +154,11 @@ public class SearchActivity extends BaseMovieViewerActivity {
                         JSONObject result = resultList.getJSONObject(i);
 
                         searchResults.addResults(result.getString("id"), result.getString("title"));
-                        resultRadioGroup.addView(createResultRadioButton(result.getInt("id"), result.getString("title")));
+
+                        //resultRadioGroup.addView(createResultRadioButton(result.getInt("id"), result.getString("title")));
                     }
+                    resultAdapter = new ResultAdapter(searchResults.getResults());
+                    resultsListView.setAdapter(resultAdapter);
 
                     showHidePageButtons();
                 } catch(Exception e) {
@@ -195,9 +201,9 @@ public class SearchActivity extends BaseMovieViewerActivity {
         return searchService;
     }
 
-    public RadioGroup getResultRadioGroup() {
+    /*public RadioGroup getResultRadioGroup() {
         return resultRadioGroup;
-    }
+    }*/
 
     public Button getSelectButton() {
         return selectButton;
