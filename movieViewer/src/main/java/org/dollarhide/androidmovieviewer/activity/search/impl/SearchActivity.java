@@ -35,7 +35,6 @@ public class SearchActivity extends BaseMovieViewerActivity {
 
     //page inputs
     private EditText titleInput;
-   // private RadioGroup resultRadioGroup;
     private ListView resultsListView;
     private Button selectButton;
     private Button prevPageButton;
@@ -45,7 +44,6 @@ public class SearchActivity extends BaseMovieViewerActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-
 
         searchService = new SearchService();
 
@@ -108,13 +106,6 @@ public class SearchActivity extends BaseMovieViewerActivity {
         searchCriteria = new SearchCriteria();
         searchCriteria.setMovieTitle(movieTitle);
         searchCriteria.setPageNumber(pageNumber);
-    }
-
-    private RadioButton createResultRadioButton(int id, String label) {
-        RadioButton resultRadioButton = new RadioButton(this);
-        resultRadioButton.setId(id);
-        resultRadioButton.setText(label);
-        return resultRadioButton;
     }
 
     private void hideSelectButton() {
@@ -198,10 +189,6 @@ public class SearchActivity extends BaseMovieViewerActivity {
     public SearchService getSearchService() {
         return searchService;
     }
-
-    /*public RadioGroup getResultRadioGroup() {
-        return resultRadioGroup;
-    }*/
 
     public Button getSelectButton() {
         return selectButton;
